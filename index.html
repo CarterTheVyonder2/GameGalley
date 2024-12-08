@@ -75,10 +75,12 @@
             background: black;
             z-index: 9999;
         }
-        #fullscreen iframe {
+        #fullscreen .ruffle-container {
             width: 100%;
             height: 100%;
-            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         #fullscreen .close-btn {
             position: absolute;
@@ -155,54 +157,36 @@
     </div>
     <div id="fullscreen">
         <button class="close-btn" onclick="closeGame()">Close</button>
-        <iframe id="game-frame"></iframe>
+        <div class="ruffle-container" id="ruffle-container"></div>
     </div>
     <script>
         function playGame(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
-            const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append `index.html` to folders
+            const ruffleContainer = document.getElementById('ruffle-container');
+            ruffleContainer.innerHTML = ''; // Clear previous content
             fullscreenDiv.style.display = 'block';
         }
 
         function playSWF(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
-            const gameFrame = document.getElementById('game-frame');
+            const ruffleContainer = document.getElementById('ruffle-container');
 
-            // Ensure the iframe is ready
-            gameFrame.src = 'about:blank';
-            gameFrame.onload = () => {
-                try {
-                    const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-                    if (!doc.body) {
-                        doc.open();
-                        doc.write('<body></body>');
-                        doc.close();
-                    }
-
-                    // Inject Ruffle
-                    const rufflePlayer = document.createElement('object');
-                    rufflePlayer.data = url;
-                    rufflePlayer.type = 'application/x-shockwave-flash';
-                    rufflePlayer.style.width = '100%';
-                    rufflePlayer.style.height = '100%';
-
-                    doc.body.appendChild(rufflePlayer);
-                    console.log(`Successfully loaded SWF: ${url}`);
-                } catch (error) {
-                    console.error(`Error loading SWF file (${url}):`, error);
-                    alert('Failed to load the SWF file. Check the console for details.');
-                }
-            };
+            ruffleContainer.innerHTML = ''; // Clear any previous content
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            player.style.width = '100%';
+            player.style.height = '100%';
+            ruffleContainer.appendChild(player);
+            player.load(url).catch((err) => console.error('Failed to load SWF:', err));
 
             fullscreenDiv.style.display = 'block';
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
-            const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = ''; // Clear iframe content
-            fullscreenDiv.style.display = 'none'; // Hide fullscreen container
+            const ruffleContainer = document.getElementById('ruffle-container');
+            ruffleContainer.innerHTML = ''; // Clear Ruffle content
+            fullscreenDiv.style.display = 'none';
         }
     </script>
 </body>
