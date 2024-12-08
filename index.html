@@ -108,42 +108,42 @@
         <div class="card">
             <img src="der.jpg" alt="Game 1">
             <h3>Dave's Escape Room</h3>
-            <button onclick="playGame('web.i-gamer.net/appic/html5/2581/')">Play</button>
+            <button onclick="playGame('./web.i-gamer.net/appic/html5/2581/')">Play</button>
         </div>
         <!-- Card 2 -->
         <div class="card">
             <img src="evolve.jpg" alt="Game 2">
             <h3>Evolve</h3>
-            <button onclick="playGame('ZombiesWeb/831/')">Play</button>
+            <button onclick="playGame('./ZombiesWeb/831/')">Play</button>
         </div>
         <!-- Card 3 -->
         <div class="card">
             <img src="bs.jpg" alt="Bad SpongeBob">
             <h3>Bad SpongeBob</h3>
-            <button onclick="playGame('bob.swf')">Play</button>
+            <button onclick="playGame('./bob.swf')">Play</button>
         </div>
         <!-- Card 4 -->
         <div class="card">
             <img src="oe.jpg" alt="Game 4">
             <h3>PvZOE</h3>
-            <button onclick="playGame('ruanzhu/pza/zijie/')">Play</button>
+            <button onclick="playGame('./ruanzhu/pza/zijie/')">Play</button>
         </div>
         <!-- Card 5 -->
         <div class="card">
             <img src="abqq.jpg" alt="ABQQ">
             <h3>Angry Birds QQ</h3>
-            <button onclick="embedFolder('abal/miniprogram/abal/qq/release/')">Play</button>
+            <button onclick="playGame('./abal/miniprogram/abal/qq/release/')">Play</button>
         </div>
         <!-- Card 6 -->
         <div class="card">
             <img src="fvm.jpg" alt="Game 6">
             <h3>Food vs Mouse</h3>
-            <button onclick="playGame('fvm.swf')">Play</button>
+            <button onclick="playGame('./fvm.swf')">Play</button>
         </div>
     </div>
     <div id="fullscreen">
         <button class="close-btn" onclick="closeGame()">Close</button>
-        <iframe id="game-frame" src=""></iframe>
+        <iframe id="game-frame"></iframe>
     </div>
     <script>
         function playGame(url) {
@@ -151,33 +151,26 @@
             const gameFrame = document.getElementById('game-frame');
 
             if (url.endsWith('.swf')) {
-                // Use Ruffle for .swf files
-                const rufflePlayer = document.createElement('object');
-                rufflePlayer.data = url;
-                rufflePlayer.type = 'application/x-shockwave-flash';
-                rufflePlayer.style.width = '100%';
-                rufflePlayer.style.height = '100%';
+                // Use Ruffle for SWF files
+                const ruffleObject = document.createElement('object');
+                ruffleObject.data = url;
+                ruffleObject.type = 'application/x-shockwave-flash';
+                ruffleObject.style.width = '100%';
+                ruffleObject.style.height = '100%';
 
-                // Clear the iframe and inject the Ruffle player
-                const gameFrameDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-                gameFrameDoc.open();
-                gameFrameDoc.body.innerHTML = ''; // Clear previous content
-                gameFrameDoc.body.appendChild(rufflePlayer); // Add Ruffle object
-                gameFrameDoc.close();
+                // Inject the Ruffle player into the iframe
+                const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                doc.open();
+                doc.body.innerHTML = ''; // Clear existing content
+                doc.body.appendChild(ruffleObject); // Add Ruffle object
+                doc.close();
             } else {
-                // Load normal URL into the iframe
-                gameFrame.src = url + 'index.html'; // Default to `index.html`
+                // Handle normal HTML files or directories
+                if (!url.endsWith('/')) {
+                    url += '/';
+                }
+                gameFrame.src = url + 'index.html'; // Load index.html by default
             }
-
-            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
-        }
-
-        function embedFolder(folderUrl) {
-            const fullscreenDiv = document.getElementById('fullscreen');
-            const gameFrame = document.getElementById('game-frame');
-
-            // Load the folder directly
-            gameFrame.src = folderUrl + 'index.html'; // Default to `index.html`
 
             fullscreenDiv.style.display = 'block'; // Show the fullscreen container
         }
@@ -185,8 +178,8 @@
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = ''; // Clear the iframe source
-            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
+            gameFrame.src = ''; // Clear iframe content
+            fullscreenDiv.style.display = 'none'; // Hide the container
         }
     </script>
 </body>
