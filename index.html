@@ -15,15 +15,23 @@
             padding: 0;
         }
         header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: linear-gradient(to right, #004080, #001f40);
             padding: 15px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         header h1 {
-            margin: 0;
+            margin: 0 10px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             color: #ffcc00;
+            white-space: nowrap;
+        }
+        header img {
+            height: 30px; /* Ensures the images are small */
+            width: auto;
         }
         .container {
             display: flex;
@@ -103,7 +111,9 @@
 </head>
 <body>
     <header>
+        <img src="left-icon.png" alt="Left Icon">
         <h1>Dragon Boi's Game Galley!</h1>
+        <img src="right-icon.png" alt="Right Icon">
     </header>
     <div class="container">
         <!-- Card 1 -->
@@ -138,20 +148,14 @@
         </div>
         <!-- Card 6 -->
         <div class="card">
-            <img src="fvm.jpg" alt="Food vs Mouse (LOADER) ">
+            <img src="fvm.jpg" alt="Food vs Mouse">
             <h3>Food vs Mouse</h3>
             <button onclick="playSWF('./fvm.swf')">Play</button>
         </div>
         <!-- Card 7 -->
         <div class="card">
-            <img src="tvn.jpg" alt="Game 7">
-            <h3>Toys vs Nightmares</h3>
-            <button onclick="playSWF('./tvn.swf')">Play</button>
-        </div>
-        <!-- Card 8 -->
-        <div class="card">
-            <img src="cts2d.jpg" alt="Game 8">
-            <h3>Charlie2D </h3>
+            <img src="cts2d.jpg" alt="Charlie2D">
+            <h3>Charlie2D</h3>
             <button onclick="playSWF('./cts2d.swf')">Play</button>
         </div>
     </div>
