@@ -166,24 +166,28 @@
         }
 
         function playSWF(url) {
-            const fullscreenDiv = document.getElementById('fullscreen');
-            const gameFrame = document.getElementById('game-frame');
+            try {
+                const fullscreenDiv = document.getElementById('fullscreen');
+                const gameFrame = document.getElementById('game-frame');
 
-            // Inject Ruffle for SWF files
-            const rufflePlayer = document.createElement('object');
-            rufflePlayer.data = url;
-            rufflePlayer.type = 'application/x-shockwave-flash';
-            rufflePlayer.style.width = '100%';
-            rufflePlayer.style.height = '100%';
+                // Inject Ruffle for SWF files
+                const rufflePlayer = document.createElement('object');
+                rufflePlayer.data = url;
+                rufflePlayer.type = 'application/x-shockwave-flash';
+                rufflePlayer.style.width = '100%';
+                rufflePlayer.style.height = '100%';
 
-            // Clear iframe and inject Ruffle player
-            const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-            doc.open();
-            doc.body.innerHTML = ''; // Clear content
-            doc.body.appendChild(rufflePlayer);
-            doc.close();
+                const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                doc.open();
+                doc.body.innerHTML = ''; // Clear existing content
+                doc.body.appendChild(rufflePlayer);
+                doc.close();
 
-            fullscreenDiv.style.display = 'block';
+                fullscreenDiv.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading SWF:', error);
+                alert('Failed to load the SWF file. Check the console for details.');
+            }
         }
 
         function closeGame() {
