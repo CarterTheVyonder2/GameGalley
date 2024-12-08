@@ -88,13 +88,6 @@
             height: 100%;
             border: none;
         }
-        #fullscreen .ruffle-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
         #fullscreen .close-btn {
             position: absolute;
             top: 10px;
@@ -116,9 +109,9 @@
 </head>
 <body>
     <header>
-        <img src="dragonboi.png" alt="Dragon Boi Icon">
+        <img src="dragonboi.png" alt="Left Icon">
         <h1>Dragon Boi's Game Galley!</h1>
-        <img src="dragonboi.png" alt="Dragon Boi Icon">
+        <img src="dragonboi.png" alt="Right Icon">
     </header>
     <div class="container">
         <!-- Card 1 -->
@@ -166,7 +159,7 @@
     </div>
     <div id="fullscreen">
         <button class="close-btn" onclick="closeGame()">Close</button>
-        <div class="ruffle-container" id="ruffle-container"></div>
+        <iframe id="game-frame"></iframe>
     </div>
     <script>
         function playGame(url) {
@@ -174,33 +167,39 @@
             const gameFrame = document.getElementById('game-frame');
 
             console.log(`Loading game from: ${url}`);
-            gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append index.html by default
+            gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Load index.html by default
             fullscreenDiv.style.display = 'block'; // Show the fullscreen container
         }
 
         function playSWF(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
-            const ruffleContainer = document.getElementById('ruffle-container');
-            ruffleContainer.innerHTML = ''; // Clear any previous Ruffle content
+            const gameFrame = document.getElementById('game-frame');
 
-            const ruffle = window.RufflePlayer.newest();
-            const player = ruffle.createPlayer();
-            player.style.width = '100%';
-            player.style.height = '100%';
-            ruffleContainer.appendChild(player);
+            console.log(`Attempting to load SWF file: ${url}`);
+            gameFrame.src = 'about:blank'; // Clear the iframe first
+            gameFrame.onload = () => {
+                const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                doc.open();
+                doc.write('<body></body>');
+                doc.close();
 
-            player.load(url).catch((err) => {
-                console.error(`Failed to load SWF: ${url}`, err);
-            });
+                const rufflePlayer = document.createElement('object');
+                rufflePlayer.data = url;
+                rufflePlayer.type = 'application/x-shockwave-flash';
+                rufflePlayer.style.width = '100%';
+                rufflePlayer.style.height = '100%';
 
-            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+                doc.body.appendChild(rufflePlayer);
+            };
+
+            fullscreenDiv.style.display = 'block';
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
-            const ruffleContainer = document.getElementById('ruffle-container');
-            ruffleContainer.innerHTML = ''; // Clear Ruffle content
-            fullscreenDiv.style.display = 'none'; // Hide fullscreen container
+            const gameFrame = document.getElementById('game-frame');
+            gameFrame.src = ''; // Clear the iframe
+            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
         }
     </script>
 </body>
