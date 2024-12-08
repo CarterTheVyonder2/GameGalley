@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dragon Boi's Game Galley!</title>
@@ -64,6 +65,38 @@
             background: linear-gradient(to bottom, #34d058, #22863a);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
+        #fullscreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 9999;
+        }
+        #fullscreen iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #fullscreen .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        #fullscreen .close-btn:hover {
+            background: darkred;
+        }
     </style>
 </head>
 <body>
@@ -73,52 +106,88 @@
     <div class="container">
         <!-- Card 1 -->
         <div class="card">
-            <img src="images/game1.jpg" alt="Game 1">
-            <h3>Game Title 1</h3>
-            <button onclick="location.href='games/game1/'">Play</button>
+            <img src="der.jpg" alt="Game 1">
+            <h3>Dave's Escape Room</h3>
+            <button onclick="playGame('web.i-gamer.net/appic/html5/2581/')">Play</button>
         </div>
         <!-- Card 2 -->
         <div class="card">
-            <img src="images/game2.jpg" alt="Game 2">
-            <h3>Game Title 2</h3>
-            <button onclick="location.href='games/game2/'">Play</button>
+            <img src="evolve.jpg" alt="Game 2">
+            <h3>Evolve</h3>
+            <button onclick="playGame('ZombiesWeb/831/')">Play</button>
         </div>
         <!-- Card 3 -->
         <div class="card">
-            <img src="images/game3.jpg" alt="Game 3">
-            <h3>Game Title 3</h3>
-            <button onclick="location.href='games/game3/'">Play</button>
+            <img src="bs.jpg" alt="Bad SpongeBob">
+            <h3>Bad SpongeBob</h3>
+            <button onclick="playGame('bob.swf')">Play</button>
         </div>
         <!-- Card 4 -->
         <div class="card">
-            <img src="images/game4.jpg" alt="Game 4">
-            <h3>Game Title 4</h3>
-            <button onclick="location.href='games/game4/'">Play</button>
+            <img src="oe.jpg" alt="Game 4">
+            <h3>PvZOE</h3>
+            <button onclick="playGame('/ruanzhu/pza/zijie/')">Play</button>
         </div>
         <!-- Card 5 -->
         <div class="card">
-            <img src="images/game5.jpg" alt="Game 5">
-            <h3>Game Title 5</h3>
-            <button onclick="location.href='games/game5/'">Play</button>
+            <img src="abqq.jpg" alt="ABQQ">
+            <h3>Angry Birds QQ</h3>
+            <button onclick="embedFolder('abal/miniprogram/abal/qq/release/')">Play</button>
         </div>
         <!-- Card 6 -->
         <div class="card">
-            <img src="images/game6.jpg" alt="Game 6">
-            <h3>Game Title 6</h3>
-            <button onclick="location.href='games/game6/'">Play</button>
-        </div>
-        <!-- Card 7 -->
-        <div class="card">
-            <img src="images/game7.jpg" alt="Game 7">
-            <h3>Game Title 7</h3>
-            <button onclick="location.href='games/game7/'">Play</button>
-        </div>
-        <!-- Card 8 -->
-        <div class="card">
-            <img src="images/game8.jpg" alt="Game 8">
-            <h3>Game Title 8</h3>
-            <button onclick="location.href='games/game8/'">Play</button>
+            <img src="fvm.jpg" alt="Game 6">
+            <h3>Food vs Mouse</h3>
+            <button onclick="playGame('fvm.swf')">Play</button>
         </div>
     </div>
+    <div id="fullscreen">
+        <button class="close-btn" onclick="closeGame()">Close</button>
+        <iframe id="game-frame" src=""></iframe>
+    </div>
+    <script>
+        function playGame(url) {
+            const fullscreenDiv = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
+
+            if (url.endsWith('.swf')) {
+                // Use Ruffle for .swf files
+                const rufflePlayer = document.createElement('object');
+                rufflePlayer.data = url;
+                rufflePlayer.type = 'application/x-shockwave-flash';
+                rufflePlayer.style.width = '100%';
+                rufflePlayer.style.height = '100%';
+
+                // Clear the iframe and inject the Ruffle player
+                const gameFrameDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                gameFrameDoc.open();
+                gameFrameDoc.body.innerHTML = ''; // Clear previous content
+                gameFrameDoc.body.appendChild(rufflePlayer); // Add Ruffle object
+                gameFrameDoc.close();
+            } else {
+                // Load normal URL into the iframe
+                gameFrame.src = url + 'index.html'; // Default to `index.html`
+            }
+
+            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+        }
+
+        function embedFolder(folderUrl) {
+            const fullscreenDiv = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
+
+            // Load the folder directly
+            gameFrame.src = folderUrl + 'index.html'; // Default to `index.html`
+
+            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+        }
+
+        function closeGame() {
+            const fullscreenDiv = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
+            gameFrame.src = ''; // Clear the iframe source
+            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
+        }
+    </script>
 </body>
 </html>
