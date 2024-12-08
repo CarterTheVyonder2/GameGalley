@@ -120,7 +120,7 @@
         <div class="card">
             <img src="bs.jpg" alt="Bad SpongeBob">
             <h3>Bad SpongeBob</h3>
-            <button onclick="playGame('./bob.swf')">Play</button>
+            <button onclick="playSWF('./bob.swf')">Play</button>
         </div>
         <!-- Card 4 -->
         <div class="card">
@@ -138,7 +138,7 @@
         <div class="card">
             <img src="fvm.jpg" alt="Game 6">
             <h3>Food vs Mouse</h3>
-            <button onclick="playGame('./fvm.swf')">Play</button>
+            <button onclick="playSWF('./fvm.swf')">Play</button>
         </div>
         <!-- Card 7 -->
         <div class="card">
@@ -161,34 +161,36 @@
         function playGame(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
+            gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append `index.html` to folders
+            fullscreenDiv.style.display = 'block';
+        }
 
-            if (url.endsWith('.swf')) {
-                console.log(`Attempting to load SWF: ${url}`);
-                const rufflePlayer = document.createElement('object');
-                rufflePlayer.data = url;
-                rufflePlayer.type = 'application/x-shockwave-flash';
-                rufflePlayer.style.width = '100%';
-                rufflePlayer.style.height = '100%';
+        function playSWF(url) {
+            const fullscreenDiv = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
 
-                // Inject Ruffle into iframe
-                const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-                doc.open();
-                doc.body.innerHTML = ''; // Clear existing content
-                doc.body.appendChild(rufflePlayer); // Add Ruffle player
-                doc.close();
-            } else {
-                console.log(`Attempting to load URL: ${url}`);
-                gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append `index.html` to directories
-            }
+            // Inject Ruffle for SWF files
+            const rufflePlayer = document.createElement('object');
+            rufflePlayer.data = url;
+            rufflePlayer.type = 'application/x-shockwave-flash';
+            rufflePlayer.style.width = '100%';
+            rufflePlayer.style.height = '100%';
 
-            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+            // Clear iframe and inject Ruffle player
+            const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+            doc.open();
+            doc.body.innerHTML = ''; // Clear content
+            doc.body.appendChild(rufflePlayer);
+            doc.close();
+
+            fullscreenDiv.style.display = 'block';
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
             gameFrame.src = ''; // Clear iframe content
-            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
+            fullscreenDiv.style.display = 'none'; // Hide fullscreen container
         }
     </script>
 </body>
