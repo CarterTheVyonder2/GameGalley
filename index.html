@@ -104,35 +104,11 @@
         <h1>Dragon Boi's Game Galley!</h1>
     </header>
     <div class="container">
-        <!-- Card 1 -->
-        <div class="card">
-            <img src="der.jpg" alt="Game 1">
-            <h3>Dave's Escape Room</h3>
-            <button onclick="playGame('./web.i-gamer.net/appic/html5/2581/')">Play</button>
-        </div>
-        <!-- Card 2 -->
-        <div class="card">
-            <img src="evolve.jpg" alt="Game 2">
-            <h3>Evolve</h3>
-            <button onclick="playGame('./ZombiesWeb/831/')">Play</button>
-        </div>
         <!-- Card 3 -->
         <div class="card">
             <img src="bs.jpg" alt="Bad SpongeBob">
             <h3>Bad SpongeBob</h3>
             <button onclick="playGame('./bob.swf')">Play</button>
-        </div>
-        <!-- Card 4 -->
-        <div class="card">
-            <img src="oe.jpg" alt="Game 4">
-            <h3>PvZOE</h3>
-            <button onclick="playGame('./ruanzhu/pza/zijie/')">Play</button>
-        </div>
-        <!-- Card 5 -->
-        <div class="card">
-            <img src="abqq.jpg" alt="ABQQ">
-            <h3>Angry Birds QQ</h3>
-            <button onclick="playGame('./abal/miniprogram/abal/qq/release/')">Play</button>
         </div>
         <!-- Card 6 -->
         <div class="card">
@@ -151,33 +127,32 @@
             const gameFrame = document.getElementById('game-frame');
 
             if (url.endsWith('.swf')) {
-                // Check if Ruffle is working
-                console.log('Loading SWF file:', url);
+                console.log(`Attempting to load SWF: ${url}`);
                 const rufflePlayer = document.createElement('object');
                 rufflePlayer.data = url;
                 rufflePlayer.type = 'application/x-shockwave-flash';
                 rufflePlayer.style.width = '100%';
                 rufflePlayer.style.height = '100%';
 
-                // Inject Ruffle into iframe
+                // Clear iframe content and inject Ruffle
                 const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
                 doc.open();
                 doc.body.innerHTML = ''; // Clear existing content
-                doc.body.appendChild(rufflePlayer); // Add Ruffle
+                doc.body.appendChild(rufflePlayer); // Add Ruffle player
                 doc.close();
             } else {
-                console.log('Loading non-SWF file:', url);
-                gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append `index.html` to directories
+                console.log(`Attempting to load URL: ${url}`);
+                gameFrame.src = url;
             }
 
-            fullscreenDiv.style.display = 'block'; // Show fullscreen container
+            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = ''; // Clear iframe
-            fullscreenDiv.style.display = 'none'; // Hide fullscreen container
+            gameFrame.src = ''; // Clear iframe content
+            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
         }
     </script>
 </body>
