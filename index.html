@@ -151,35 +151,33 @@
             const gameFrame = document.getElementById('game-frame');
 
             if (url.endsWith('.swf')) {
-                // Use Ruffle for SWF files
-                const ruffleObject = document.createElement('object');
-                ruffleObject.data = url;
-                ruffleObject.type = 'application/x-shockwave-flash';
-                ruffleObject.style.width = '100%';
-                ruffleObject.style.height = '100%';
+                // Check if Ruffle is working
+                console.log('Loading SWF file:', url);
+                const rufflePlayer = document.createElement('object');
+                rufflePlayer.data = url;
+                rufflePlayer.type = 'application/x-shockwave-flash';
+                rufflePlayer.style.width = '100%';
+                rufflePlayer.style.height = '100%';
 
-                // Inject the Ruffle player into the iframe
+                // Inject Ruffle into iframe
                 const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
                 doc.open();
                 doc.body.innerHTML = ''; // Clear existing content
-                doc.body.appendChild(ruffleObject); // Add Ruffle object
+                doc.body.appendChild(rufflePlayer); // Add Ruffle
                 doc.close();
             } else {
-                // Handle normal HTML files or directories
-                if (!url.endsWith('/')) {
-                    url += '/';
-                }
-                gameFrame.src = url + 'index.html'; // Load index.html by default
+                console.log('Loading non-SWF file:', url);
+                gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Append `index.html` to directories
             }
 
-            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+            fullscreenDiv.style.display = 'block'; // Show fullscreen container
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = ''; // Clear iframe content
-            fullscreenDiv.style.display = 'none'; // Hide the container
+            gameFrame.src = ''; // Clear iframe
+            fullscreenDiv.style.display = 'none'; // Hide fullscreen container
         }
     </script>
 </body>
