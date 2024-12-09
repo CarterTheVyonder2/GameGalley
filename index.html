@@ -15,15 +15,23 @@
             padding: 0;
         }
         header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: linear-gradient(to right, #004080, #001f40);
             padding: 15px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         header h1 {
-            margin: 0;
+            margin: 0 10px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             color: #ffcc00;
+            white-space: nowrap;
+        }
+        header img {
+            height: 30px;
+            width: auto;
         }
         .container {
             display: flex;
@@ -97,22 +105,29 @@
         #fullscreen .close-btn:hover {
             background: darkred;
         }
+        .disclaimer {
+            margin: 20px 0;
+            font-size: 1.2em;
+            color: red;
+        }
     </style>
 </head>
 <body>
     <header>
+        <img src="dragonboi.png" alt="Left Icon">
         <h1>Dragon Boi's Game Galley!</h1>
+        <img src="dragonboi.png" alt="Right Icon">
     </header>
     <div class="container">
         <!-- Card 1 -->
         <div class="card">
-            <img src="der.jpg" alt="Game 1">
+            <img src="der.jpg" alt="Dave's Escape Room">
             <h3>Dave's Escape Room</h3>
             <button onclick="playGame('./web.i-gamer.net/appic/html5/2581/')">Play</button>
         </div>
         <!-- Card 2 -->
         <div class="card">
-            <img src="evolve.jpg" alt="Game 2">
+            <img src="evolve.jpg" alt="Evolve">
             <h3>Evolve</h3>
             <button onclick="playGame('./ZombiesWeb/831/')">Play</button>
         </div>
@@ -120,66 +135,91 @@
         <div class="card">
             <img src="bs.jpg" alt="Bad SpongeBob">
             <h3>Bad SpongeBob</h3>
-            <button onclick="playGame('./bob.swf')">Play</button>
+            <button onclick="playSWF('./bob.swf')">Play</button>
         </div>
         <!-- Card 4 -->
         <div class="card">
-            <img src="oe.jpg" alt="Game 4">
+            <img src="oe.jpg" alt="PvZOE">
             <h3>PvZOE</h3>
             <button onclick="playGame('./ruanzhu/pza/zijie/')">Play</button>
         </div>
         <!-- Card 5 -->
         <div class="card">
-            <img src="abqq.jpg" alt="ABQQ">
-            <h3>Angry Birds QQ</h3>
-            <button onclick="playGame('./abal/miniprogram/abal/qq/release/')">Play</button>
+            <img src="icc.jpg" alt="Ice Cream Catapult">
+            <h3>Ice Cream Catapult</h3>
+            <button onclick="playSWF('./icc.swf')">Play</button>
         </div>
         <!-- Card 6 -->
         <div class="card">
-            <img src="fvm.jpg" alt="Game 6">
+            <img src="fvm.jpg" alt="Food vs Mouse">
             <h3>Food vs Mouse</h3>
-            <button onclick="playGame('./fvm.swf')">Play</button>
+            <button onclick="playSWF('./fvm.swf')">Play</button>
+        </div>
+        <!-- Card 7 -->
+        <div class="card">
+            <img src="cts2d.jpg" alt="Charlie2D">
+            <h3>Charlie2D</h3>
+            <button onclick="playSWF('./cts2d.swf')">Play</button>
+        </div>
+        <!-- Card 8 -->
+        <div class="card">
+            <img src="oe.jpg" alt="PvZOE: v48">
+            <h3>PvZOE: v48</h3>
+            <button onclick="playGame('./v48/res.gamejym.com/pza/v48/')">Play</button>
+        </div>
+        <!-- Card 9 -->
+        <div class="card">
+            <img src="oe.jpg" alt="PvZOE: Super Chomper Build">
+            <h3>PvZOE: Super Chomper Build</h3>
+            <button onclick="playGame('./SuperChomper/res.gamejym.com/ruanhu/pza/byte/v4/')">Play</button>
         </div>
     </div>
     <div id="fullscreen">
         <button class="close-btn" onclick="closeGame()">Close</button>
         <iframe id="game-frame"></iframe>
     </div>
+    <div class="disclaimer">
+        Refresh after each game is closed
+    </div>
     <script>
         function playGame(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
 
-            if (url.endsWith('.swf')) {
-                // Use Ruffle for SWF files
-                const ruffleObject = document.createElement('object');
-                ruffleObject.data = url;
-                ruffleObject.type = 'application/x-shockwave-flash';
-                ruffleObject.style.width = '100%';
-                ruffleObject.style.height = '100%';
+            console.log(`Loading game from: ${url}`);
+            gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html'); // Load index.html by default
+            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+        }
 
-                // Inject the Ruffle player into the iframe
+        function playSWF(url) {
+            const fullscreenDiv = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
+
+            console.log(`Attempting to load SWF file: ${url}`);
+            gameFrame.src = 'about:blank'; // Clear the iframe first
+            gameFrame.onload = () => {
                 const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
                 doc.open();
-                doc.body.innerHTML = ''; // Clear existing content
-                doc.body.appendChild(ruffleObject); // Add Ruffle object
+                doc.write('<body></body>');
                 doc.close();
-            } else {
-                // Handle normal HTML files or directories
-                if (!url.endsWith('/')) {
-                    url += '/';
-                }
-                gameFrame.src = url + 'index.html'; // Load index.html by default
-            }
 
-            fullscreenDiv.style.display = 'block'; // Show the fullscreen container
+                const rufflePlayer = document.createElement('object');
+                rufflePlayer.data = url;
+                rufflePlayer.type = 'application/x-shockwave-flash';
+                rufflePlayer.style.width = '100%';
+                rufflePlayer.style.height = '100%';
+
+                doc.body.appendChild(rufflePlayer);
+            };
+
+            fullscreenDiv.style.display = 'block';
         }
 
         function closeGame() {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-            gameFrame.src = ''; // Clear iframe content
-            fullscreenDiv.style.display = 'none'; // Hide the container
+            gameFrame.src = ''; // Clear the iframe
+            fullscreenDiv.style.display = 'none'; // Hide the fullscreen container
         }
     </script>
 </body>
