@@ -30,7 +30,7 @@
             white-space: nowrap;
         }
         header img {
-            height: 60px; /* Double the original size (assuming original is 30px) */
+            height: 60px;
             width: auto;
         }
         .container {
@@ -54,9 +54,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         .card h3 {
-            margin: 15px 0;
+            margin: 15px 0 10px 0;
             font-size: 1.5em;
             color: #ffcc00;
+        }
+        .card p {
+            font-size: 1em;
+            color: #cccccc;
+            margin: 10px 0;
         }
         .card button {
             background: linear-gradient(to bottom, #28a745, #19692c);
@@ -119,67 +124,83 @@
         <img src="dragonboi.gif" alt="Right Icon">
     </header>
     <div class="container">
-        <!-- Existing Cards -->
         <div class="card">
             <img src="der.jpg" alt="Dave's Escape Room">
             <h3>Dave's Escape Room</h3>
+            <p>Previously lost 2c Anniversary game!</p>
             <button onclick="playGame('./web.i-gamer.net/appic/html5/2581/')">Play</button>
         </div>
+
         <div class="card">
             <img src="evolve.jpg" alt="Evolve">
             <h3>Evolve</h3>
+            <p>That one heavily clickbaited PvZ game with the anime girls.</p>
             <button onclick="playGame('./ZombiesWeb/831/')">Play</button>
         </div>
+
         <div class="card">
             <img src="bs.jpg" alt="Bad SpongeBob">
             <h3>Bad SpongeBob</h3>
+            <p>Bad piggies. But with SpongeBob. how original!</p>
             <button onclick="playSWF('./bob.swf')">Play</button>
         </div>
+
         <div class="card">
             <img src="oe.jpg" alt="PvZOE">
             <h3>PvZOE</h3>
+            <p>The one and only, PvZOE!</p>
             <button onclick="playGame('./ruanzhu/pza/zijie/')">Play</button>
         </div>
+
         <div class="card">
             <img src="icc.jpg" alt="Ice Cream Catapult">
             <h3>Ice Cream Catapult</h3>
+            <p>Angry birds. But with ice cream.</p>
             <button onclick="playSWF('./icc.swf')">Play</button>
         </div>
+
         <div class="card">
             <img src="fvm.jpg" alt="Food vs Mouse (LOADER, UNPLAYABLE)">
             <h3>Food vs Mouse (LOADER, UNPLAYABLE)</h3>
+            <p>Remember that grindy game from 2010? Well, it's not playable outside of China.<br> But, me and a friend are trying to make it be! Mind you this isn't playable yet! </p>
             <button onclick="playSWF('./fvm.swf')">Play</button>
         </div>
+
         <div class="card">
             <img src="cts2d.jpg" alt="Charlie2D">
             <h3>Charlie2D</h3>
+            <p>Just Charlie the steak in flash and redrawn.</p>
             <button onclick="playSWF('./cts2d.swf')">Play</button>
         </div>
+
         <div class="card">
             <img src="oe.jpg" alt="PvZOE: v48">
             <h3>PvZOE: v48</h3>
+            <p>One of the many leaked prototypes of PvZOE. May not fully work.</p>
             <button onclick="playGame('./ruanzhu/pza/v48')">Play</button>
         </div>
+
         <div class="card">
             <img src="oe.jpg" alt="PvZOE: Super Chomper Build">
             <h3>PvZOE: Super Chomper Build</h3>
+            <p>The build of PvZOE with the "Big Mouth" level, pretty explanatory.</p>
             <button onclick="playGame('./ruanzhu/pza/v4')">Play</button>
         </div>
-        </div>
     </div>
+
     <div id="fullscreen">
         <button class="close-btn" onclick="closeGame()">Close</button>
         <iframe id="game-frame"></iframe>
     </div>
+
     <div class="disclaimer">
         Refresh after each game is closed
     </div>
+
     <script>
         function playGame(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-
-            console.log(`Loading game from: ${url}`);
             gameFrame.src = url + (url.endsWith('/') ? 'index.html' : '/index.html');
             fullscreenDiv.style.display = 'block';
         }
@@ -187,8 +208,6 @@
         function playSWF(url) {
             const fullscreenDiv = document.getElementById('fullscreen');
             const gameFrame = document.getElementById('game-frame');
-
-            console.log(`Attempting to load SWF file: ${url}`);
             gameFrame.src = 'about:blank';
             gameFrame.onload = () => {
                 const doc = gameFrame.contentDocument || gameFrame.contentWindow.document;
@@ -204,7 +223,6 @@
 
                 doc.body.appendChild(rufflePlayer);
             };
-
             fullscreenDiv.style.display = 'block';
         }
 
